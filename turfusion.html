@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>turfusion · kdro.ai</title>
+<meta name="description" content="turfusion is a diffusion model that draws pixel-art buildings from a list of attributes, trained from scratch on a single 8 GB GPU with the whole corpus resident in video memory.">
+<meta name="theme-color" content="#07040f">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="kdro.css">
+</head>
+<body>
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+<div class="page">
+  <header class="top">
+    <a class="wordmark" href="./" aria-label="kdro.ai">kdro<small>.ai</small></a>
+    <nav>
+      <a href="./#work">Work</a>
+      <a href="./#about">About</a>
+      <a href="./#contact">Contact</a>
+      <a href="https://github.com/kristiandroste" rel="noopener">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="doc">
+    <p class="eyebrow">turfusion · generative model</p>
+    <h1>Pixel art from a list of attributes.</h1>
+    <p class="lede">turfusion is a diffusion model that draws pixel-art buildings the way the artists of a collection drew
+      them: from the attributes that describe each plot.</p>
+
+    <div class="facts">
+      <div class="card fact"><b>5,041</b><span>hand-drawn plots in the training set</span></div>
+      <div class="card fact"><b>750 × 750</b><span>pixels, the art's native grid</span></div>
+      <div class="card fact"><b>1 GPU</b><span>a single 8 GB consumer card, from scratch</span></div>
+      <div class="card fact"><b>&lt; 1 GB</b><span>the whole corpus, losslessly packed, resident in video memory</span></div>
+    </div>
+
+    <h2>What it does</h2>
+    <p>Each plot in the collection is described by attributes: the building, its details, the pet in the window
+      (<code>Pet: Tabby Cat</code>). turfusion learns to draw a plot from such a list, so it can draw the plots that
+      exist and ones that never did, in the collection's own hand-drawn style.</p>
+
+    <h2>How it is built</h2>
+    <ul>
+      <li>A UNet denoiser. The attributes are embedded once with CLIP's text encoder; their pooled mean steers every
+        block (FiLM through adaptive group norm), and the full sequence is attended to with cross-attention at the coarse
+        resolutions. Training never needs CLIP itself.</li>
+      <li>A cosine noise schedule with v-prediction, and a DDIM sampler with classifier-free guidance.</li>
+      <li>Trained from scratch on one 8 GB consumer GPU, in several runs: the full corpus, the art's native grid,
+        fine-tuning for rare plots and for detail.</li>
+    </ul>
+
+    <h2>Trained inside video memory</h2>
+    <p>The whole corpus goes to the GPU once, at start-up: the 5,041 plots at their native 750 × 750, run-length encoded
+      losslessly into under a gigabyte, and decoded for each batch on the GPU itself with a single
+      <code>repeat_interleave</code>. After that the training loop moves nothing but a few bytes of bookkeeping between
+      the computer and the GPU per step: decoding, normalisation, noising, the forward and backward passes and the weight
+      averaging all happen there.
+      A dashboard written with Python's standard library alone shows the run and the GPU's telemetry on the local
+      network.</p>
+
+    <h2>Pixel-perfect</h2>
+    <p>Hand-drawn pixel art has few colours, about 313 distinct ones per plot, and perfectly flat regions. A diffusion
+      model working in continuous colour leaves a smooth bias of a few levels across an image, which is invisible to the
+      eye and fatal to the pixel grid. turfusion comes with a measurement suite that scores a sample against the art's own
+      statistics, and a region-level flattening step: connected regions whose neighbouring pixels differ by almost nothing
+      are snapped to the palette as one, where snapping pixel by pixel had only made the patchiness worse.</p>
+
+    <h2>Real plots, and turfusion's drawings of them</h2>
+    <p>Left, a plot as its artists drew it, from the holdings of Turf's largest plot holder. Right, what turfusion draws
+      from that plot's attributes. turfusion learned from the whole collection, so a drawing of an existing plot shows how
+      well it holds the style and the particulars: the plot type, the pet, the clouds and the signs all come from the
+      attribute list.</p>
+    <div class="pairs">
+      <figure class="pair">
+        <div class="two"><span class="im" data-l="real"><img src="img/plot-2088.png" width="750" height="750" alt="The real plot: a museum with a rocket in the sky." loading="lazy"></span><span class="im" data-l="turfusion"><img src="img/gen-2088.png" width="750" height="750" alt="turfusion's drawing of the museum plot." loading="lazy"></span></div>
+        <figcaption><b>Turf Plot [−31, −21]</b> · History Museum, Mcduku Rocket, 3 clouds</figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="two"><span class="im" data-l="real"><img src="img/plot-3607.png" width="750" height="750" alt="The real plot: a worship center of crystal." loading="lazy"></span><span class="im" data-l="turfusion"><img src="img/gen-3607.png" width="750" height="750" alt="turfusion's drawing of the worship center plot." loading="lazy"></span></div>
+        <figcaption><b>Turf Plot [3, −29]</b> · Worship Center, Distant Balloon, 4 clouds</figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="two"><span class="im" data-l="real"><img src="img/plot-3075.png" width="750" height="750" alt="The real plot: a high school with a graffitied, cracked upper floor." loading="lazy"></span><span class="im" data-l="turfusion"><img src="img/gen-3075.png" width="750" height="750" alt="turfusion's drawing of the high school plot, with the two upper floors in the other order." loading="lazy"></span></div>
+        <figcaption><b>Turf Plot [−10, −3]</b> · High School, Cobblestone, Rose Wood, Severely Cracked. The drawing puts the two upper floors in the other order.</figcaption>
+      </figure>
+      <figure class="pair">
+        <div class="two"><span class="im" data-l="real"><img src="img/plot-4882.png" width="750" height="750" alt="The real plot: a music hall in birch wood." loading="lazy"></span><span class="im" data-l="turfusion"><img src="img/gen-4882.png" width="750" height="750" alt="turfusion's drawing of the music hall plot." loading="lazy"></span></div>
+        <figcaption><b>Turf Plot [−32, −31]</b> · Music Hall, Birch Wood, Boos Sign, Bird</figcaption>
+      </figure>
+    </div>
+    <p class="small">Real plots: the Turf collection (contract <code>0x55d8…44c6</code>), as held by its largest holder at the
+      time of writing. Drawings: turfusion, 250 DDIM steps, guidance 3, one sample each.</p>
+
+    <h2>How Kristian architected it</h2>
+    <p>One constraint shaped everything: a single 8 GB consumer GPU, used completely, and nothing else. From that came
+      the design:</p>
+    <ul>
+      <li><b>The GPU holds the data, not just the model.</b> The corpus is run-length encoded losslessly and uploaded once;
+        every batch is decoded on the card. Training at the art's native grid runs at batch size one with gradient
+        accumulation, and an exponential moving average of the weights is what samples.</li>
+      <li><b>Conditioning is computed once, elsewhere.</b> Every <code>trait: value</code> string is embedded with CLIP's
+        text encoder ahead of time and shipped as a table, so the training machine never loads CLIP. The pooled
+        embedding steers every block through adaptive group norm; the full attribute sequence is attended to with
+        cross-attention at the coarse resolutions, where composition is decided.</li>
+      <li><b>A plain, well-understood objective.</b> A cosine schedule with v-prediction; classifier-free guidance by
+        dropping the conditioning for a tenth of the training examples; DDIM sampling, 250 steps at native resolution.</li>
+      <li><b>A curriculum, not one run.</b> The whole collection first, at a small canvas; then the art's native
+        750-pixel grid; then fine-tuning that weights the rare plots. The last pass came from a measurement: a sweep of
+        sampling steps showed the sampler saturated, and snapping to even the true palette left the residual, so the
+        remaining error was the model's, at the low-noise end of the schedule, where fine detail is decided. The final
+        fine-tune triples the training density there.</li>
+      <li><b>Pixel art is measured, not eyeballed.</b> Samples are scored against the hand-drawn art's own statistics,
+        and a region-level flattening step turns the model's smooth colour drift into the flat, few-coloured regions
+        of real pixel art.</li>
+      <li><b>Runs look after themselves.</b> Supervisor scripts restart interrupted training, and a dashboard written
+        with Python's standard library alone shows the run and the GPU on the local network.</li>
+    </ul>
+
+    <h2>Weights</h2>
+    <p>The weights are not yet open, but may be available on request: <a href="./#contact">get in touch</a>.</p>
+
+    <a class="back" href="./">← kdro.ai</a>
+  </main>
+
+  <footer>
+    <span>© 2026 Kristian Droste</span>
+    <span>No frameworks, no trackers, no cookies.</span>
+  </footer>
+</div>
+<script src="field.js"></script>
+</body>
+</html>

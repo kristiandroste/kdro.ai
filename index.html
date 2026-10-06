@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kdro.ai · the personal AI studio of Kristian Droste</title>
+<meta name="description" content="kdro.ai is the personal AI studio of Kristian Droste: baabaa, a self-hosted assistant and coding agent on local models; turfusion, a pixel-art diffusion model; and IntoMind, the neurotechnology company he runs.">
+<meta name="theme-color" content="#07040f">
+<meta property="og:title" content="kdro.ai">
+<meta property="og:description" content="The personal AI studio of Kristian Droste.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="kdro.css">
+</head>
+<body>
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+<div class="page">
+  <header class="top">
+    <a class="wordmark" href="./" aria-label="kdro.ai">kdro<small>.ai</small></a>
+    <nav>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="https://github.com/kristiandroste" rel="noopener">GitHub</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <p class="eyebrow">The personal AI studio of Kristian Droste</p>
+    <h1>Growing synthetic minds.</h1>
+    <p class="lede"><b>Assistants</b> that run on your own hardware. <b>Models</b> that draw worlds from a handful of words.
+      <b>Foundation models</b> that learn the brain's own signals.</p>
+
+    <article class="card hero-card" id="baabaa">
+      <div>
+        <p class="kicker">baabaa · open source</p>
+        <h2>Your own assistant and coding agent, on your own GPU.</h2>
+        <p>A self-hosted assistant and coding agent on local models: chat and code in one place, with the memory, projects,
+          artifacts and history that a model alone forgets, and a sandbox for everything it runs. Python standard library,
+          no dependencies, one-line install.</p>
+        <div class="strand"><div class="th" id="strand"></div><span class="label" id="strandLabel"></span></div>
+        <div class="actions">
+          <a class="btn btn-uv" href="https://baabaa.kdro.ai/">Visit baabaa.kdro.ai</a>
+          <a class="btn" href="https://github.com/kristiandroste/baabaa" rel="noopener">Source on GitHub</a>
+        </div>
+      </div>
+      <div class="shot"><img src="img/baabaa.png" width="1400" height="900" alt="baabaa fixing a failing test in a project folder: it reads the file, edits one line, runs the tests and explains the change." loading="eager"></div>
+    </article>
+  </section>
+
+  <section id="work">
+    <h2>Work</h2>
+    <div class="grid">
+      <article class="card work">
+        <div class="art pixel"><img src="img/gen-4882.png" width="750" height="750" alt="A pixel-art music hall drawn by turfusion from the plot’s attributes." loading="lazy"></div>
+        <p class="kicker">turfusion · generative model</p>
+        <h3>Pixel art from a list of attributes</h3>
+        <p>A diffusion model that draws pixel-art buildings from the attributes that describe them, trained from scratch on a
+          single 8 GB GPU with the whole corpus resident in video memory.</p>
+        <div class="links"><a href="turfusion.html">Read about turfusion</a></div>
+      </article>
+      <article class="card work">
+        <div class="art brain"><canvas id="eeg" width="640" height="360" aria-hidden="true"></canvas></div>
+        <p class="kicker">IntoMind · neurotechnology</p>
+        <h3>Foundation models for the brain</h3>
+        <p>Kristian runs IntoMind, which builds noninvasive brain-computer interfaces for human understanding and
+          augmentation. His own work there includes neural foundation models embedded on wearable EEG devices.</p>
+        <div class="links"><a href="https://www.intomind.com/" rel="noopener">intomind.com</a><a href="https://github.com/intomind" rel="noopener">IntoMind on GitHub</a></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>About</h2>
+    <article class="card about">
+      <p>Kristian Droste is a neuroscientist and product developer who builds AI systems. He runs IntoMind, a neurotechnology
+        company building noninvasive brain-computer interfaces, where his own work includes neural foundation models
+        embedded on wearable EEG devices. kdro.ai is his personal studio: a small sample of his work worth sharing.</p>
+      <p>Everything here is built the same way: plain code, no frameworks, no tracking.</p>
+    </article>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <article class="card contact">
+      <div>
+        <h3>Say hello</h3>
+        <p>The best way to reach Kristian is a personalized message on LinkedIn: a line about who you are and what you are
+          working on goes a long way.</p>
+      </div>
+      <ul>
+        <li><a href="https://www.linkedin.com/in/kdro" rel="noopener"><svg class="icon" viewBox="0 0 24 24"><path d="M6 9v12M6 5v.5M10 21v-7a3 3 0 0 1 6 0v7M10 11v2"/></svg>LinkedIn<span>personalized messages</span></a></li>
+        <li><a href="https://github.com/kristiandroste" rel="noopener"><svg class="icon" viewBox="0 0 24 24"><path d="M9 19c-4 1.5-4-2-6-2m12 4v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.5 11.5 0 0 0-6 0C6.8 3.3 5.8 3.6 5.8 3.6a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4.4 10c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>GitHub<span>kristiandroste</span></a></li>
+        <li><a href="https://www.intomind.com/" rel="noopener"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12h3l2-5 3 10 3-8 2 3h5"/></svg>IntoMind<span>intomind.com</span></a></li>
+      </ul>
+    </article>
+  </section>
+
+  <footer>
+    <span>© 2026 Kristian Droste</span>
+    <span>No frameworks, no trackers, no cookies.</span>
+  </footer>
+</div>
+<script src="thread.js"></script>
+<script src="field.js"></script>
+<script src="kdro.js"></script>
+</body>
+</html>
